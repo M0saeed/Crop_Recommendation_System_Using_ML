@@ -5,6 +5,10 @@
 [![Scikit-Learn](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange.svg?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+<p align="center">
+  <img src="img.jpg" alt="Crop Recommendation System Banner" width="100%" style="border-radius: 12px; max-height: 400px; object-fit: cover;">
+</p>
+
 An AI-powered Precision Agriculture decision support system that recommends the most suitable crop to cultivate based on environmental, meteorological, and soil nutrient conditions.
 
 ---
