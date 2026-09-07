@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Crop Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --accent: #14b8a6;
+            --dark-bg: #0b1320;
+            --card-bg: rgba(18, 28, 46, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glow: rgba(16, 185, 129, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(20, 184, 166, 0.12) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 2.5rem 1.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.025em;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #ffffff 30%, #a7f3d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.75rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 620px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 40px var(--glow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        label span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.75rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(11, 19, 32, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            background: rgba(11, 19, 32, 0.9);
+        }
+
+        input::placeholder {
+            color: #6b7280;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #042f2e;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+            filter: brightness(1.08);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 14px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            text-align: center;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .result-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6ee7b7;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="badge">🌱 Machine Learning Application</div>
+        <h1>Crop Recommendation System</h1>
+        <p class="subtitle">Enter your soil and climate environmental conditions to predict the most optimal crop for cultivation.</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <form action="/predict" method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="Nitrogen">Nitrogen (N) <span>(kg/ha)</span></label>
+                        <input type="number" step="any" id="Nitrogen" name="Nitrogen" placeholder="e.g. 90" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Phosporus">Phosphorus (P) <span>(kg/ha)</span></label>
+                        <input type="number" step="any" id="Phosporus" name="Phosporus" placeholder="e.g. 42" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Potassium">Potassium (K) <span>(kg/ha)</span></label>
+                        <input type="number" step="any" id="Potassium" name="Potassium" placeholder="e.g. 43" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Temperature">Temperature <span>(°C)</span></label>
+                        <input type="number" step="any" id="Temperature" name="Temperature" placeholder="e.g. 21.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Humidity">Humidity <span>(%)</span></label>
+                        <input type="number" step="any" id="Humidity" name="Humidity" placeholder="e.g. 82.0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Ph">Soil pH <span>(0 - 14)</span></label>
+                        <input type="number" step="any" id="Ph" name="Ph" placeholder="e.g. 6.5" required>
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="Rainfall">Rainfall <span>(mm)</span></label>
+                        <input type="number" step="any" id="Rainfall" name="Rainfall" placeholder="e.g. 202.9" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span>✨ Recommend Optimal Crop</span>
+                </button>
+            </form>
+
+            {% if result %}
+            <div class="result-box">
+                <div class="result-title">Recommendation Result</div>
+                <div class="result-value">{{ result }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with Flask & Scikit-Learn | Crop Recommendation System ML Project</p>
+    </footer>
+</body>
+</html>
